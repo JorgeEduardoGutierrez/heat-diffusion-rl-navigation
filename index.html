@@ -1,230 +1,236 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Heat-Diffusion RL — Resultados de Navegación Robótica</title>
-
-    <style>
-        :root {
-            --main-blue:#0078D7;
-            --bg:#f5f5f5;
-            --card-bg:#ffffff;
-            --shadow:0 4px 8px rgba(0,0,0,0.12);
-            --radius:12px;
-        }
-        *{box-sizing:border-box;margin:0;padding:0}
-        body{
-            font-family:Arial,Helvetica,sans-serif;
-            background:var(--bg);
-            color:#333;
-            line-height:1.45;
-        }
-        header{
-            background:var(--main-blue);
-            color:#fff;
-            padding:2rem 1rem;
-            text-align:center;
-        }
-        header h1{font-size:2rem;margin-bottom:.3rem}
-        .repo-link{
-            display:inline-block;
-            margin-top:.5rem;
-            color:#fff;
-            text-decoration:underline;
-            font-size:0.95rem;
-        }
-        .description{
-            max-width:900px;
-            margin:1.5rem auto;
-            background:var(--card-bg);
-            padding:1.5rem 2rem;
-            border-radius:var(--radius);
-            box-shadow:var(--shadow);
-        }
-        /* === CONTENEDOR PRINCIPAL : 2 COLUMNAS === */
-        .results-wrapper{
-            display:grid;
-            grid-template-columns:repeat(auto-fit,minmax(480px,1fr));
-            gap:1.5rem;
-            max-width:1600px;
-            margin:0 auto 2.5rem;
-        }
-        .column{
-            background:var(--card-bg);
-            padding:1.5rem;
-            border-radius:var(--radius);
-            box-shadow:var(--shadow);
-        }
-        .column h2{
-            text-align:center;
-            margin-bottom:1rem;
-            color:var(--main-blue);
-        }
-        /* === 4 RENGLONES === */
-        .row{
-            margin-bottom:2rem;
-        }
-        /* === GRID DE 5 VIDEOS === */
-        .video-grid{
-            display:grid;
-            grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-            gap:.75rem;
-        }
-        video{
-            width:100%;
-            height:auto;
-            border:1px solid #ccc;
-            border-radius:var(--radius);
-        }
-        /* === GRÁFICA === */
-        .plot{
-            margin-top:.8rem;
-            width:100%;
-            border:1px solid #d0d0d0;
-            border-radius:var(--radius);
-        }
-        footer{
-            background:#333;
-            color:#fff;
-            text-align:center;
-            padding:1rem 0;
-            font-size:.85rem;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Robotic Navigation with Heat-Diffusion Reward Shaping</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <header>
-    <h1>Resultados de Navegación Robótica con Diffusion-Based Reward Shaping</h1>
-    <a class="repo-link" href="https://github.com/usuario/proyecto-diffusion-rl" target="_blank">
-        Código fuente &nbsp;↗
-    </a>
+  <h1>Robotic Navigation Results with Heat-Diffusion Reward Shaping</h1>
+  <a class="repo-link" href="https://github.com/usuario/heat-diffusion-rl-navigation" target="_blank">
+    Source code ↗
+  </a>
 </header>
 
 <section class="description">
-    Implementamos **Heat-Diffusion Reward Fields** para acelerar el aprendizaje del agente
-    (algoritmo SAC) en entornos estáticos y dinámicos.  
-    A continuación se muestran los videos de las trayectorias aprendidas en escenarios
-    con obstáculos **convexos** y **cóncavos**.  
-    Las cinco variantes son: *baseline*, *diffusion only*, *diffusion + reward filter*,
-    *diffusion + decay* y *diffusion both*.
+  <p>
+    This page presents the results of robotic navigation experiments using
+    <strong>Heat-Diffusion Reward Fields</strong> to accelerate learning with the Soft Actor-Critic (SAC) algorithm.
+    The goal is to evaluate how shaped rewards based on diffusion influence learning speed and success rates
+    in environments with <strong>convex</strong> and <strong>concave obstacles</strong>.
+  </p>
+
+  <h4 class="section-subtitle">Scenario Configurations</h4>
+  <p>
+    The experiments explore four types of initial conditions, varying the positions of the robot and the goal:
+    <ul>
+      <li><strong>Fixed Robot – Fixed Goal:</strong> Both positions remain constant throughout training.</li>
+      <li><strong>Fixed Robot – Random Goal:</strong> The robot starts from a fixed position; the goal changes each episode.</li>
+      <li><strong>Random Robot – Fixed Goal:</strong> The goal remains fixed; the robot starts from different positions.</li>
+      <li><strong>Random Robot – Random Goal:</strong> Both the robot and goal positions change in every episode.</li>
+    </ul>
+  </p>
+
+  <h4 class="section-subtitle">Experimental Variants</h4>
+  <p>
+    For each configuration, we evaluate the following five methods:
+    <ul>
+      <li><strong>Baseline:</strong> Standard SAC algorithm with sparse terminal rewards only.</li>
+      <li><strong>Heat Diffusion Only:</strong> Dense rewards are computed by solving the heat equation from the goal position.</li>
+      <li><strong>Heat Diffusion + Reward Filter:</strong> The agent only receives reward when moving toward higher diffusion values.</li>
+      <li><strong>Heat Diffusion + Decay:</strong> Intermediate rewards decay over time to encourage early success.</li>
+      <li><strong>Heat Diffusion Full:</strong> Combines both reward filtering and time decay on top of the diffusion field.</li>
+    </ul>
+  </p>
+
+<h4 class="section-subtitle">Training Metrics Reported</h4>
+<p>
+  Below each set of experiment videos, we include a performance plot titled <strong>Training Performance Results</strong>.
+  These plots display the success rate throughout training, measured both in training steps and in real-time minutes.
+  Two key metrics are reported for each experiment:
+  <ul>
+    <li><strong>Step and Time to 90% Success Rate:</strong> The earliest point during training at which the agent reaches at least 90% success rate.</li>
+    <li><strong>Peak Performance:</strong> The maximum success rate achieved during training, along with the corresponding step and minute.</li>
+  </ul>
+  These indicators are used to assess convergence speed and final performance across all experimental methods.
+</p>
+
+
+
+  <h4 class="section-subtitle">Interactive Diffusion Maps</h4>
+  <p>
+    Below, we include two examples of the precomputed diffusion maps: one with convex obstacles and one with concave structures.
+    These maps are <strong>interactive</strong>: you can click and drag to rotate, zoom, and explore the propagation of reward.
+    The <strong>goal position</strong> used to generate the diffusion is clearly marked in each map as the center of propagation.
+  </p>
 </section>
 
-<!-- ================= MAIN RESULTS ================= -->
-<div class="results-wrapper">
 
-    <!-- ========= COL 1 : CONVEX ========= -->
-    <div class="column">
-        <h2>Entornos Convexos</h2>
-
-        <!-- ===== ROW 1 ===== -->
-        <div class="row">
-            <div class="video-grid">
-                <video controls src="videos/convex_r1_baseline.mp4"></video>
-                <video controls src="videos/convex_r1_diffusion.mp4"></video>
-                <video controls src="videos/convex_r1_diffusion_reward.mp4"></video>
-                <video controls src="videos/convex_r1_diffusion_decay.mp4"></video>
-                <video controls src="videos/convex_r1_diffusion_both.mp4"></video>
-            </div>
-            <img class="plot" src="plots/convex_r1_metrics.png" alt="Resultados cuantitativos fila 1 convexos">
-        </div>
-
-        <!-- ===== ROW 2 ===== -->
-        <div class="row">
-            <div class="video-grid">
-                <video controls src="videos/convex_r2_baseline.mp4"></video>
-                <video controls src="videos/convex_r2_diffusion.mp4"></video>
-                <video controls src="videos/convex_r2_diffusion_reward.mp4"></video>
-                <video controls src="videos/convex_r2_diffusion_decay.mp4"></video>
-                <video controls src="videos/convex_r2_diffusion_both.mp4"></video>
-            </div>
-            <img class="plot" src="plots/convex_r2_metrics.png" alt="Resultados cuantitativos fila 2 convexos">
-        </div>
-
-        <!-- ===== ROW 3 ===== -->
-        <div class="row">
-            <div class="video-grid">
-                <video controls src="videos/convex_r3_baseline.mp4"></video>
-                <video controls src="videos/convex_r3_diffusion.mp4"></video>
-                <video controls src="videos/convex_r3_diffusion_reward.mp4"></video>
-                <video controls src="videos/convex_r3_diffusion_decay.mp4"></video>
-                <video controls src="videos/convex_r3_diffusion_both.mp4"></video>
-            </div>
-            <img class="plot" src="plots/convex_r3_metrics.png" alt="Resultados cuantitativos fila 3 convexos">
-        </div>
-
-        <!-- ===== ROW 4 ===== -->
-        <div class="row">
-            <div class="video-grid">
-                <video controls src="videos/convex_r4_baseline.mp4"></video>
-                <video controls src="videos/convex_r4_diffusion.mp4"></video>
-                <video controls src="videos/convex_r4_diffusion_reward.mp4"></video>
-                <video controls src="videos/convex_r4_diffusion_decay.mp4"></video>
-                <video controls src="videos/convex_r4_diffusion_both.mp4"></video>
-            </div>
-            <img class="plot" src="plots/convex_r4_metrics.png" alt="Resultados cuantitativos fila 4 convexos">
-        </div>
-    </div>
-
-    <!-- ========= COL 2 : CONCAVE ========= -->
-    <div class="column">
-        <h2>Entornos Cóncavos</h2>
-
-        <!-- ===== ROW 1 ===== -->
-        <div class="row">
-            <div class="video-grid">
-                <video controls src="videos/concave_r1_baseline.mp4"></video>
-                <video controls src="videos/concave_r1_diffusion.mp4"></video>
-                <video controls src="videos/concave_r1_diffusion_reward.mp4"></video>
-                <video controls src="videos/concave_r1_diffusion_decay.mp4"></video>
-                <video controls src="videos/concave_r1_diffusion_both.mp4"></video>
-            </div>
-            <img class="plot" src="plots/concave_r1_metrics.png" alt="Resultados cuantitativos fila 1 cóncavos">
-        </div>
-
-        <!-- ===== ROW 2 ===== -->
-        <div class="row">
-            <div class="video-grid">
-                <video controls src="videos/concave_r2_baseline.mp4"></video>
-                <video controls src="videos/concave_r2_diffusion.mp4"></video>
-                <video controls src="videos/concave_r2_diffusion_reward.mp4"></video>
-                <video controls src="videos/concave_r2_diffusion_decay.mp4"></video>
-                <video controls src="videos/concave_r2_diffusion_both.mp4"></video>
-            </div>
-            <img class="plot" src="plots/concave_r2_metrics.png" alt="Resultados cuantitativos fila 2 cóncavos">
-        </div>
-
-        <!-- ===== ROW 3 ===== -->
-        <div class="row">
-            <div class="video-grid">
-                <video controls src="videos/concave_r3_baseline.mp4"></video>
-                <video controls src="videos/concave_r3_diffusion.mp4"></video>
-                <video controls src="videos/concave_r3_diffusion_reward.mp4"></video>
-                <video controls src="videos/concave_r3_diffusion_decay.mp4"></video>
-                <video controls src="videos/concave_r3_diffusion_both.mp4"></video>
-            </div>
-            <img class="plot" src="plots/concave_r3_metrics.png" alt="Resultados cuantitativos fila 3 cóncavos">
-        </div>
-
-        <!-- ===== ROW 4 ===== -->
-        <div class="row">
-            <div class="video-grid">
-                <video controls src="videos/concave_r4_baseline.mp4"></video>
-                <video controls src="videos/concave_r4_diffusion.mp4"></video>
-                <video controls src="videos/concave_r4_diffusion_reward.mp4"></video>
-                <video controls src="videos/concave_r4_diffusion_decay.mp4"></video>
-                <video controls src="videos/concave_r4_diffusion_both.mp4"></video>
-            </div>
-            <img class="plot" src="plots/concave_r4_metrics.png" alt="Resultados cuantitativos fila 4 cóncavos">
-        </div>
-    </div>
-
+<!-- Interactive Heatmaps -->
+<div class="interactive-wrapper">
+  <div class="map-card">
+    <h3>Convex Environment</h3>
+    <iframe src="plots/heatmap_convex.html" class="interactive-plot" loading="lazy"></iframe>
+  </div>
+  <div class="map-card">
+    <h3>Concave Environment</h3>
+    <iframe src="plots/heatmap_concave.html" class="interactive-plot" loading="lazy"></iframe>
+  </div>
 </div>
 
+<div class="results-wrapper">
+
+  <!-- ========= COLUMN CONVEX ========= -->
+  <div class="column">
+    <h2>Convex Environments</h2>
+
+    <!-- Fixed Robot – Fixed Goal -->
+    <div class="row">
+      <h3 class="row-title">Fixed Robot, Fixed Goal</h3>
+      <div class="video-grid">
+        <div class="video-box" data-path="videos/convex_rf_gf_baseline/"><video controls></video><p class="video-label">Baseline Sparse Reward</p></div>
+        <div class="video-box" data-path="videos/convex_rf_gf_diffusion/"><video controls></video><p class="video-label">Heat Diffusion Only</p></div>
+        <div class="video-box" data-path="videos/convex_rf_gf_diffusion_reward/"><video controls></video><p class="video-label">Heat Diffusion + Reward Filter</p></div>
+        <div class="video-box" data-path="videos/convex_rf_gf_diffusion_decay/"><video controls></video><p class="video-label">Heat Diffusion + Decay</p></div>
+        <div class="video-box single-video" data-path="videos/convex_rf_gf_diffusion_both/"><video controls></video><p class="video-label">Heat Diffusion Full</p></div>
+      </div>
+      <p class="plot-title">Training Performance Results</p>
+      <img class="plot" src="plots_png/success_convex_rf_gf.png" alt="Success plot for Convex – Fixed Robot, Fixed Goal">
+      <div class="divider"></div>
+    </div>
+
+    <!-- Fixed Robot – Random Goal -->
+    <div class="row">
+      <h3 class="row-title">Fixed Robot, Random Goal</h3>
+      <div class="video-grid">
+        <div class="video-box" data-path="videos/convex_rf_gr_baseline/"><video controls></video><p class="video-label">Baseline Sparse Reward</p></div>
+        <div class="video-box" data-path="videos/convex_rf_gr_diffusion/"><video controls></video><p class="video-label">Heat Diffusion Only</p></div>
+        <div class="video-box" data-path="videos/convex_rf_gr_diffusion_reward/"><video controls></video><p class="video-label">Heat Diffusion + Reward Filter</p></div>
+        <div class="video-box" data-path="videos/convex_rf_gr_diffusion_decay/"><video controls></video><p class="video-label">Heat Diffusion + Decay</p></div>
+        <div class="video-box single-video" data-path="videos/convex_rf_gr_diffusion_both/"><video controls></video><p class="video-label">Heat Diffusion Full</p></div>
+      </div>
+      <p class="plot-title">Training Performance Results</p>
+      <img class="plot" src="plots_png/success_convex_rf_gr.png" alt="Success plot for Convex – Fixed Robot, Random Goal">
+      <div class="divider"></div>
+    </div>
+
+    <!-- Random Robot – Fixed Goal -->
+    <div class="row">
+      <h3 class="row-title">Random Robot, Fixed Goal</h3>
+      <div class="video-grid">
+        <div class="video-box" data-path="videos/convex_rr_gf_baseline/"><video controls></video><p class="video-label">Baseline Sparse Reward</p></div>
+        <div class="video-box" data-path="videos/convex_rr_gf_diffusion/"><video controls></video><p class="video-label">Heat Diffusion Only</p></div>
+        <div class="video-box" data-path="videos/convex_rr_gf_diffusion_reward/"><video controls></video><p class="video-label">Heat Diffusion + Reward Filter</p></div>
+        <div class="video-box" data-path="videos/convex_rr_gf_diffusion_decay/"><video controls></video><p class="video-label">Heat Diffusion + Decay</p></div>
+        <div class="video-box single-video" data-path="videos/convex_rr_gf_diffusion_both/"><video controls></video><p class="video-label">Heat Diffusion Full</p></div>
+      </div>
+      <p class="plot-title">Training Performance Results</p>
+      <img class="plot" src="plots_png/success_convex_rr_gf.png" alt="Success plot for Convex – Random Robot, Fixed Goal">
+      <div class="divider"></div>
+    </div>
+
+    <!-- Random Robot – Random Goal -->
+    <div class="row">
+      <h3 class="row-title">Random Robot, Random Goal</h3>
+      <div class="video-grid">
+        <div class="video-box" data-path="videos/convex_rr_gr_baseline/"><video controls></video><p class="video-label">Baseline Sparse Reward</p></div>
+        <div class="video-box" data-path="videos/convex_rr_gr_diffusion/"><video controls></video><p class="video-label">Heat Diffusion Only</p></div>
+        <div class="video-box" data-path="videos/convex_rr_gr_diffusion_reward/"><video controls></video><p class="video-label">Heat Diffusion + Reward Filter</p></div>
+        <div class="video-box" data-path="videos/convex_rr_gr_diffusion_decay/"><video controls></video><p class="video-label">Heat Diffusion + Decay</p></div>
+        <div class="video-box single-video" data-path="videos/convex_rr_gr_diffusion_both/"><video controls></video><p class="video-label">Heat Diffusion Full</p></div>
+      </div>
+      <p class="plot-title">Training Performance Results</p>
+      <img class="plot" src="plots_png/success_convex_rr_gr.png" alt="Success plot for Convex – Random Robot, Random Goal">
+      <div class="divider"></div>
+    </div>
+  </div>
+
+  <!-- ========= COLUMN CONCAVE ========= -->
+  <div class="column">
+    <h2>Concave Environments</h2>
+
+    <!-- Concave rows idénticos al patrón anterior… -->
+    <!-- Fixed Robot – Fixed Goal -->
+    <div class="row">
+      <h3 class="row-title">Fixed Robot, Fixed Goal</h3>
+      <div class="video-grid">
+        <div class="video-box" data-path="videos/concave_rf_gf_baseline/"><video controls></video><p class="video-label">Baseline Sparse Reward</p></div>
+        <div class="video-box" data-path="videos/concave_rf_gf_diffusion/"><video controls></video><p class="video-label">Heat Diffusion Only</p></div>
+        <div class="video-box" data-path="videos/concave_rf_gf_diffusion_reward/"><video controls></video><p class="video-label">Heat Diffusion + Reward Filter</p></div>
+        <div class="video-box" data-path="videos/concave_rf_gf_diffusion_decay/"><video controls></video><p class="video-label">Heat Diffusion + Decay</p></div>
+        <div class="video-box single-video" data-path="videos/concave_rf_gf_diffusion_both/"><video controls></video><p class="video-label">Heat Diffusion Full</p></div>
+      </div>
+      <p class="plot-title">Training Performance Results</p>
+      <img class="plot" src="plots_png/success_concave_rf_gf.png" alt="Success plot for Concave – Fixed Robot, Fixed Goal">
+      <div class="divider"></div>
+    </div>
+
+    <!-- Fixed Robot – Random Goal -->
+    <div class="row">
+      <h3 class="row-title">Fixed Robot, Random Goal</h3>
+      <div class="video-grid">
+        <div class="video-box" data-path="videos/concave_rf_gr_baseline/"><video controls></video><p class="video-label">Baseline Sparse Reward</p></div>
+        <div class="video-box" data-path="videos/concave_rf_gr_diffusion/"><video controls></video><p class="video-label">Heat Diffusion Only</p></div>
+        <div class="video-box" data-path="videos/concave_rf_gr_diffusion_reward/"><video controls></video><p class="video-label">Heat Diffusion + Reward Filter</p></div>
+        <div class="video-box" data-path="videos/concave_rf_gr_diffusion_decay/"><video controls></video><p class="video-label">Heat Diffusion + Decay</p></div>
+        <div class="video-box single-video" data-path="videos/concave_rf_gr_diffusion_both/"><video controls></video><p class="video-label">Heat Diffusion Full</p></div>
+      </div>
+      <p class="plot-title">Training Performance Results</p>
+      <img class="plot" src="plots_png/success_concave_rf_gr.png" alt="Success plot for Concave – Fixed Robot, Random Goal">
+      <div class="divider"></div>
+    </div>
+
+    <!-- Random Robot – Fixed Goal -->
+    <div class="row">
+      <h3 class="row-title">Random Robot, Fixed Goal</h3>
+      <div class="video-grid">
+        <div class="video-box" data-path="videos/concave_rr_gf_baseline/"><video controls></video><p class="video-label">Baseline Sparse Reward</p></div>
+        <div class="video-box" data-path="videos/concave_rr_gf_diffusion/"><video controls></video><p class="video-label">Heat Diffusion Only</p></div>
+        <div class="video-box" data-path="videos/concave_rr_gf_diffusion_reward/"><video controls></video><p class="video-label">Heat Diffusion + Reward Filter</p></div>
+        <div class="video-box" data-path="videos/concave_rr_gf_diffusion_decay/"><video controls></video><p class="video-label">Heat Diffusion + Decay</p></div>
+        <div class="video-box single-video" data-path="videos/concave_rr_gf_diffusion_both/"><video controls></video><p class="video-label">Heat Diffusion Full</p></div>
+      </div>
+      <p class="plot-title">Training Performance Results</p>
+      <img class="plot" src="plots_png/success_concave_rr_gf.png" alt="Success plot for Concave – Random Robot, Fixed Goal">
+      <div class="divider"></div>
+    </div>
+
+    <!-- Random Robot – Random Goal -->
+    <div class="row">
+      <h3 class="row-title">Random Robot, Random Goal</h3>
+      <div class="video-grid">
+        <div class="video-box" data-path="videos/concave_rr_gr_baseline/"><video controls></video><p class="video-label">Baseline Sparse Reward</p></div>
+        <div class="video-box" data-path="videos/concave_rr_gr_diffusion/"><video controls></video><p class="video-label">Heat Diffusion Only</p></div>
+        <div class="video-box" data-path="videos/concave_rr_gr_diffusion_reward/"><video controls></video><p class="video-label">Heat Diffusion + Reward Filter</p></div>
+        <div class="video-box" data-path="videos/concave_rr_gr_diffusion_decay/"><video controls></video><p class="video-label">Heat Diffusion + Decay</p></div>
+        <div class="video-box single-video" data-path="videos/concave_rr_gr_diffusion_both/"><video controls></video><p class="video-label">Heat Diffusion Full</p></div>
+      </div>
+      <p class="plot-title">Training Performance Results</p>
+      <img class="plot" src="plots_png/success_concave_rr_gr.png" alt="Success plot for Concave – Random Robot, Random Goal">
+      <div class="divider"></div>
+    </div>
+  </div> <!-- end column concave -->
+</div> <!-- end results-wrapper -->
+
 <footer>
-    © 2025 — Heat Diffusion RL • Jorge Gutiérrez
+  © 2025 — Heat Diffusion RL • Jorge Gutiérrez
 </footer>
+
+<!-- ========== Script: elige un mp4 aleatorio 0–9 en cada carpeta ========== -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".video-box").forEach(box => {
+    const basePath = box.dataset.path;          // e.g. "videos/convex_rf_gf_baseline/"
+    const idx      = Math.floor(Math.random()*10); // 0 … 9
+    const video    = box.querySelector("video");
+    video.src      = `${basePath}${idx}.mp4`;
+  });
+});
+</script>
 
 </body>
 </html>
