@@ -20,7 +20,7 @@
   <p>
     This page presents the results of robotic navigation experiments using
     <strong>Heat-Diffusion Reward Fields</strong> to accelerate learning with the Soft Actor-Critic (SAC) algorithm.
-    The goal is to evaluate how shaped rewards based on diffusion influence learning speed and success rates
+    The goal is to evaluate how shaped rewards based on heat-diffusion influence learning speed and success rates
     in environments with <strong>convex</strong> and <strong>concave obstacles</strong>.
   </p>
 
@@ -28,10 +28,10 @@
   <p>
     The experiments explore four types of initial conditions, varying the positions of the robot and the goal:
     <ul>
-      <li><strong>Fixed Robot – Fixed Goal:</strong> Both positions remain constant throughout training.</li>
-      <li><strong>Fixed Robot – Random Goal:</strong> The robot starts from a fixed position; the goal changes each episode.</li>
-      <li><strong>Random Robot – Fixed Goal:</strong> The goal remains fixed; the robot starts from different positions.</li>
-      <li><strong>Random Robot – Random Goal:</strong> Both the robot and goal positions change in every episode.</li>
+      <li><strong>Fixed Start Configuration (FSC) – Fixed Goal Position (FGP):</strong> Both positions remain constant throughout training.</li>
+      <li><strong>Fixed Start Configuration (FSC) – Random Goal Position (RGP):</strong> The robot starts from a fixed position; the goal changes each episode.</li>
+      <li><strong>Random Start Contiguration (RSC) – Fixed Goal Position (FGP):</strong> The goal remains fixed; the robot starts from different positions.</li>
+      <li><strong>Random Start Configuration (RSC) – Random Goal Position (RGP):</strong> Both the robot and goal positions change in every episode.</li>
     </ul>
   </p>
 
@@ -39,11 +39,11 @@
   <p>
     For each configuration, we evaluate the following five methods:
     <ul>
-      <li><strong>Baseline:</strong> Standard SAC algorithm with sparse terminal rewards only.</li>
-      <li><strong>Heat Diffusion Only:</strong> Dense rewards are computed by solving the heat equation from the goal position.</li>
-      <li><strong>Heat Diffusion + Reward Filter:</strong> The agent only receives reward when moving toward higher diffusion values.</li>
-      <li><strong>Heat Diffusion + Decay:</strong> Intermediate rewards decay over time to encourage early success.</li>
-      <li><strong>Heat Diffusion Full:</strong> Combines both reward filtering and time decay on top of the diffusion field.</li>
+      <li><strong>Sparse:</strong> Standard SAC algorithm with sparse terminal rewards only.</li>
+      <li><strong>Heat Diffusion Only (HDRF):</strong> Dense rewards are computed by solving the heat equation from the goal position.</li>
+      <li><strong>Heat Diffusion + Reward Filter (HDRF + RF):</strong> The agent only receives reward when moving toward higher diffusion values.</li>
+      <li><strong>Heat Diffusion + Reward Decay (HDRF + RD):</strong> Intermediate rewards decay over time to encourage early success.</li>
+      <li><strong>Heat Diffusion + Reward Filter + Reward Decay (HDRF + RF + RD):</strong> Combines both reward filtering and time decay on top of the diffusion field.</li>
     </ul>
   </p>
 
@@ -73,11 +73,11 @@
 <!-- Interactive Heatmaps -->
 <div class="interactive-wrapper">
   <div class="map-card">
-    <h3>Convex Environment</h3>
+    <h3>Environment Map With Convex Obstacles</h3>
     <iframe src="plots/heatmap_convex.html" class="interactive-plot" loading="lazy"></iframe>
   </div>
   <div class="map-card">
-    <h3>Concave Environment</h3>
+    <h3>Environment Map With Concave Obstacles</h3>
     <iframe src="plots/heatmap_concave.html" class="interactive-plot" loading="lazy"></iframe>
   </div>
 </div>
@@ -86,11 +86,11 @@
 
   <!-- ========= COLUMN CONVEX ========= -->
   <div class="column">
-    <h2>Convex Environments</h2>
+    <h2>Environment Map With Convex Obstacles</h2>
 
     <!-- Fixed Robot – Fixed Goal -->
     <div class="row">
-      <h3 class="row-title">Fixed Robot, Fixed Goal</h3>
+      <h3 class="row-title">Fixed Start Contiguration, Fixed Goal Position</h3>
       <div class="video-grid">
         <div class="video-box" data-path="videos/convex_rf_gf_baseline/"><video controls></video><p class="video-label">Baseline Sparse Reward</p></div>
         <div class="video-box" data-path="videos/convex_rf_gf_diffusion/"><video controls></video><p class="video-label">Heat Diffusion Only</p></div>
@@ -105,7 +105,7 @@
 
     <!-- Fixed Robot – Random Goal -->
     <div class="row">
-      <h3 class="row-title">Fixed Robot, Random Goal</h3>
+      <h3 class="row-title">Fixed Start configuration, Random Goal Position</h3>
       <div class="video-grid">
         <div class="video-box" data-path="videos/convex_rf_gr_baseline/"><video controls></video><p class="video-label">Baseline Sparse Reward</p></div>
         <div class="video-box" data-path="videos/convex_rf_gr_diffusion/"><video controls></video><p class="video-label">Heat Diffusion Only</p></div>
@@ -120,7 +120,7 @@
 
     <!-- Random Robot – Fixed Goal -->
     <div class="row">
-      <h3 class="row-title">Random Robot, Fixed Goal</h3>
+      <h3 class="row-title">Random Start Configuration, Fixed Goal Position</h3>
       <div class="video-grid">
         <div class="video-box" data-path="videos/convex_rr_gf_baseline/"><video controls></video><p class="video-label">Baseline Sparse Reward</p></div>
         <div class="video-box" data-path="videos/convex_rr_gf_diffusion/"><video controls></video><p class="video-label">Heat Diffusion Only</p></div>
@@ -135,7 +135,7 @@
 
     <!-- Random Robot – Random Goal -->
     <div class="row">
-      <h3 class="row-title">Random Robot, Random Goal</h3>
+      <h3 class="row-title">Random Start Configuration, Random Goal Position</h3>
       <div class="video-grid">
         <div class="video-box" data-path="videos/convex_rr_gr_baseline/"><video controls></video><p class="video-label">Baseline Sparse Reward</p></div>
         <div class="video-box" data-path="videos/convex_rr_gr_diffusion/"><video controls></video><p class="video-label">Heat Diffusion Only</p></div>
@@ -151,12 +151,12 @@
 
   <!-- ========= COLUMN CONCAVE ========= -->
   <div class="column">
-    <h2>Concave Environments</h2>
+    <h2>Environment Map With Concave Obstacles</h2>
 
     <!-- Concave rows idénticos al patrón anterior… -->
     <!-- Fixed Robot – Fixed Goal -->
     <div class="row">
-      <h3 class="row-title">Fixed Robot, Fixed Goal</h3>
+      <h3 class="row-title">Fixed Start Configuration, Fixed Goal Position</h3>
       <div class="video-grid">
         <div class="video-box" data-path="videos/concave_rf_gf_baseline/"><video controls></video><p class="video-label">Baseline Sparse Reward</p></div>
         <div class="video-box" data-path="videos/concave_rf_gf_diffusion/"><video controls></video><p class="video-label">Heat Diffusion Only</p></div>
@@ -171,7 +171,7 @@
 
     <!-- Fixed Robot – Random Goal -->
     <div class="row">
-      <h3 class="row-title">Fixed Robot, Random Goal</h3>
+      <h3 class="row-title">Fixed Start Configuration, Random Goal Position</h3>
       <div class="video-grid">
         <div class="video-box" data-path="videos/concave_rf_gr_baseline/"><video controls></video><p class="video-label">Baseline Sparse Reward</p></div>
         <div class="video-box" data-path="videos/concave_rf_gr_diffusion/"><video controls></video><p class="video-label">Heat Diffusion Only</p></div>
@@ -186,7 +186,7 @@
 
     <!-- Random Robot – Fixed Goal -->
     <div class="row">
-      <h3 class="row-title">Random Robot, Fixed Goal</h3>
+      <h3 class="row-title">Random Start Configuration, Fixed Goal Position</h3>
       <div class="video-grid">
         <div class="video-box" data-path="videos/concave_rr_gf_baseline/"><video controls></video><p class="video-label">Baseline Sparse Reward</p></div>
         <div class="video-box" data-path="videos/concave_rr_gf_diffusion/"><video controls></video><p class="video-label">Heat Diffusion Only</p></div>
@@ -201,7 +201,7 @@
 
     <!-- Random Robot – Random Goal -->
     <div class="row">
-      <h3 class="row-title">Random Robot, Random Goal</h3>
+      <h3 class="row-title">Random Start Configuration, Random Goal Position</h3>
       <div class="video-grid">
         <div class="video-box" data-path="videos/concave_rr_gr_baseline/"><video controls></video><p class="video-label">Baseline Sparse Reward</p></div>
         <div class="video-box" data-path="videos/concave_rr_gr_diffusion/"><video controls></video><p class="video-label">Heat Diffusion Only</p></div>
